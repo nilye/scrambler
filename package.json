@@ -1,0 +1,12 @@
+{
+  "name": "letter-shuffler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node script/build/index.js dev"
+  },
+  "devDependencies": {
+    "esbuild": "^0.12.15"
+  }
+}
