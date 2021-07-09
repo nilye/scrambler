@@ -3,7 +3,6 @@ type ShuffleDirection = 'ltr' | 'rtl' | 'mid'
 type TimeFunc = (index: number) => number
 
 interface ShufflerOptions {
-	readonly text: string,
 	direction: ShuffleDirection,
 	characters: string | string[]
 	speed: number,
@@ -12,7 +11,25 @@ interface ShufflerOptions {
 	delay: number
 }
 
-const alphabets = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const ALPHABETS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const defaultOptions = {
+	direction: 'ltr',
+	characters: ALPHABETS,
+	speed: 83, // 12fps
+	duration: 800,
+	delay: 0
+}
+
+function normalizeOptions(
+	options: number | ShufflerOptions,
+	newOptions?: number | ShufflerOptions
+){
+	if (arguments.length === 2){
+
+	} else {
+
+	}
+}
 
 function createShuffler(
 	text: string,
