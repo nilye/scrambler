@@ -1,108 +1,51 @@
+import { normalizeOptions, ShufflerOptions } from "./options";
+import { shuffleWithOptions } from "./shuffle";
+import { isString } from "./predicate";
 
-type ShuffleDirection = 'ltr' | 'rtl' | 'mid'
-type TimeFunc = (index: number) => number
 
-interface ShufflerOptions {
-	direction: ShuffleDirection,
-	characters: string | string[]
-	speed: number,
-	interval: number,
-	duration: number,
-	delay: number
-}
-
-const ALPHABETS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const defaultOptions = {
-	direction: 'ltr',
-	characters: ALPHABETS,
-	speed: 83, // 12fps
-	duration: 800,
-	delay: 0
-}
-
-function normalizeOptions(
-	options: number | ShufflerOptions,
-	newOptions?: number | ShufflerOptions
-){
-	if (arguments.length === 2){
-
-	} else {
-
-	}
-}
-
+/**
+ * create Shuffler object
+ * @param options
+ */
 function createShuffler(
-	text: string,
-	options: ShufflerOptions
-){
-	let finalText = options.text || ''
-	let {
-		characters = alphabets,
-		speed = 83,
-		duration = 160,
-		delay = 0
-	} = options
-
-	function getRandomChar(count = 1){
-		let index = -1
-		let chars = ''
-		while (++index < count){
-			const rand = Math.floor(Math.random() * characters.length)
-			chars += characters[rand]
-		}
-		return chars
-	}
-
+	options: string | ShufflerOptions
+) {
+	let opts = normalizeOptions(options)
 	let isStarted = false
-	function shuffle(text){
-		if (isStarted) return
-		if (text){
-			finalText = text
-		}
-		const length = finalText.length
-		let staticIndex = 0
-		let lastText
-
-		console.log(speed, duration)
-
-		// set random letter
-		const shuffleInterval = setInterval(() => {
-			lastText = finalText.slice(0, staticIndex) + getRandomChar(length - staticIndex)
-			requestAnimationFrame(() => {
-				emitChange(lastText)
-			})
-		}, speed)
-
-		const stepInterval = setInterval(() => {
-			staticIndex++
-			if (staticIndex === finalText.length){
-				clearInterval(stepInterval)
-				clearInterval(shuffleInterval)
-				requestAnimationFrame(() => {
-					emitChange(lastText = finalText)
-				})
-				isStarted = false
-			} else {
-				lastText = finalText.slice(0, staticIndex) + lastText.slice(staticIndex)
-				requestAnimationFrame(() => {
-					emitChange(lastText)
-				})
-			}
-		}, duration / length)
-	}
-
 	const callbacks = new Set<Function>()
-	function emitChange(newText){
-		callbacks.forEach(cb => cb(newText))
+
+	function shuffle(
+		textOrOptions?: string | ShufflerOptions,
+	) {
+		if (isStarted) return
+		/**
+		 * New `options` should not override previous one.
+		 */
+		let currentOpts = normalizeOptions({ ...opts }, textOrOptions)
+		if (!currentOpts.text) return
+
+		isStarted = true
+		shuffleWithOptions(
+			currentOpts,
+			(text) => callbacks.forEach(cb => cb(text)),
+			() => isStarted = false)
 	}
-	function onChange(cb){
-		if (typeof cb === 'function'){
+
+	function set(
+		textOrOptions: string | ShufflerOptions
+	) {
+		opts = normalizeOptions(opts, textOrOptions)
+	}
+
+	function onChange(cb) {
+		if (typeof cb === 'function') {
 			callbacks.add(cb)
 		}
 	}
 
 	return {
 		shuffle,
+		set,
 		onChange
 	}
 }
