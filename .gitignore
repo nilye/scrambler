@@ -1,6 +1,7 @@
 .idea
 dist
 yarn.lock
+**/*/lib
 
 # Logs
 logs

@@ -3,10 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "node script/build/index.js dev"
+    "dev": "node script/build/index.js dev",
+    "build": "node script/build/index.js prod",
+    "test": "jest"
   },
   "devDependencies": {
-    "esbuild": "^0.12.15"
+    "@types/jest": "^26.0.24",
+    "esbuild": "^0.12.15",
+    "jest": "^27.0.6",
+    "lerna": "^3.22.1",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.5"
   }
 }

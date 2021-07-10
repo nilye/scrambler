@@ -1,15 +1,16 @@
-import { IndividualTimeFunc, ShufflerOptions } from "./options";
+import { IndividualTimeFunc, ScramblerOptions } from "./options";
 import { isFunction } from "./predicate";
 
-export function shuffleWithOptions(
-	options: ShufflerOptions,
+
+export function scrambleWithOptions(
+	finalText: string,
+	options: ScramblerOptions,
 	onChange: (text: string) => void,
 	onEnd: () => void
 ){
 
 	const {
-		text: finalText,
-		direction,
+		from,
 		rate,
 		characters,
 		duration,
@@ -30,9 +31,9 @@ export function shuffleWithOptions(
 
 	let _rate = computeRate()
 	/**
-	 * shuffle with random characters
+	 * scramble with random characters
 	 */
-	function shuffleImpl(){
+	function scrambleImpl(){
 		const text = finalText.slice(0, finishedIndex) + genRandomChar(length - finishedIndex, characters)
 		requestAnimationFrame(() => {
 			onChange(text)
@@ -41,11 +42,11 @@ export function shuffleWithOptions(
 	}
 
 	/**
-	 * implement the leading shuffle
+	 * implement the leading scramble
 	 * It's important, because for whatever options, the first `onChange` should always be a random string
  	 */
-	shuffleImpl()
-	const shuffleInterval = setInterval(shuffleImpl, _rate)
+	scrambleImpl()
+	const scrambleInterval = setInterval(scrambleImpl, _rate)
 
 
 	function computeInterval(){
@@ -55,7 +56,7 @@ export function shuffleWithOptions(
 	let _interval = computeInterval()
 
 	/**
-	 * finish the shuffling character by character
+	 * finish the scrambling character by character
 	 */
 	function finishChar(){
 		const stepInterval = setInterval(() => {
@@ -63,10 +64,10 @@ export function shuffleWithOptions(
 			if (finishedIndex === finalText.length){
 				/**
 				 * Usually, the `duration` is not perfectly divisible by `rate`(without a remainder left).
-				 * In order to let the shuffle effect to end exactly (or as much precise as possible) at the duration time, the time interval (rate) of the very last frame would have to be shortened.
+				 * In order to let the scramble effect to end exactly (or as much precise as possible) at the duration time, the time interval (rate) of the very last frame would have to be shortened.
 				 */
 				clearInterval(stepInterval)
-				clearInterval(shuffleInterval)
+				clearInterval(scrambleInterval)
 				requestAnimationFrame(() => {
 					onChange(finalText)
 					onEnd()

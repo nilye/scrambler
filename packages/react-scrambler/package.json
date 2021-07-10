@@ -1,0 +1,19 @@
+{
+  "name": "@nilify/react-scrambler",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Nil <entaroalsace@gmail.com>",
+  "homepage": "https://github.com/nilye/scrambler#readme",
+  "license": "ISC",
+  "main": "lib/react-scrambler.js",
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nilye/scrambler.git"
+  }
+}

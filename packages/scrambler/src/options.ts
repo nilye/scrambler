@@ -1,10 +1,9 @@
 import { isFunction, isNumber, isString } from "./predicate";
 
-export type ShuffleDirection = 'ltr' | 'rtl' | 'mid'
+export type ScrambleFromDirection = 'left' | 'right' | 'middle' | 'random'
 export type IndividualTimeFunc = (index: number, length: number) => number
-export interface ShufflerOptions {
-	text: string,
-	direction: ShuffleDirection,
+export interface ScramblerOptions {
+	from: ScrambleFromDirection,
 	characters: string | string[]
 	rate: number | IndividualTimeFunc,
 	interval?: number | IndividualTimeFunc,
@@ -20,9 +19,8 @@ const ALPHABETS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
 const MIN_SPEED = 16.6
 
-export const defaultOptions: ShufflerOptions = {
-	text: '',
-	direction: 'ltr',
+export const defaultOptions: ScramblerOptions = {
+	from: 'left',
 	characters: ALPHABETS,
 	rate: 40, // 25fps
 	duration: 800,
@@ -30,56 +28,51 @@ export const defaultOptions: ShufflerOptions = {
 }
 
 /**
- * Normalize the option to `ShuffleOptions` interface
+ * Normalize the option to `scrambleOptions` interface
  *  - if only one arg is parsed, merge `opts` to the `defaultOptions`
  *  - both args are parsed, merge `newOpts` to the `opts`
  */
 export function normalizeOptions(
-	opts: string | ShufflerOptions,
-	newOpts?: string | ShufflerOptions
-){
+	opts: Partial<ScramblerOptions>
+): ScramblerOptions
+
+export function normalizeOptions(
+	opts: ScramblerOptions,
+	newOpts: Partial<ScramblerOptions>
+): ScramblerOptions
+
+export function normalizeOptions(
+	opts: ScramblerOptions,
+	newOpts?: Partial<ScramblerOptions>
+): ScramblerOptions {
+
 	/**
 	 * If only one arg is parsed, merge it with defaultOptions.
 	 */
 	if (arguments.length === 1){
 		newOpts = opts
-		opts = new Object(defaultOptions) as ShufflerOptions
-	} else if (isString(opts)){
-		opts = new Object(defaultOptions) as ShufflerOptions
-	}
-
-	/**
-	 * Specify `text` with string.
-	 */
-	if (isString(newOpts)){
-		newOpts = { text: String(newOpts) } as ShufflerOptions
+		opts = new Object(defaultOptions) as ScramblerOptions
 	}
 
 	/**
 	 * Return `opts` if `newOpts` is not an object
 	 */
-	if (typeof newOpts != "object"){
+	if (!newOpts || typeof newOpts != "object"){
 		return opts
 	}
 
 	// destructure `newOpts`
 	const {
-		text,
-		direction,
+		from,
 		characters,
 		rate,
 		duration,
 		delay
 	} = newOpts
 
-	// text
-	if (text){
-		opts.text = text
-	}
-
-	// direction
-	if (direction && direction.match(/ltr|rtl|mid/)){
-		opts.direction = direction
+	// from
+	if (from && from.match(/left|right|middle/)){
+		opts.from = from
 	}
 
 	// characters
@@ -90,15 +83,15 @@ export function normalizeOptions(
 	}
 
 	/**
-	 * rate: rate of shuffling.
+	 * rate: rate of scrambling.
 	 */
 	if (rate){
 		opts.rate = isFunction(rate) ? rate : Math.max(Number(rate), MIN_SPEED)
 	}
 
 	/**
-	 * duration: duration of shuffling (from first to last letter)
-	 * `duration` cannot be smaller than `speed`, otherwise shuffling won't occur.
+	 * duration: duration of scrambling (from first to last letter)
+	 * `duration` cannot be smaller than `speed`, otherwise scrambling won't occur.
 	 */
 	if (duration){
 		opts.duration = Number(duration)
@@ -108,7 +101,7 @@ export function normalizeOptions(
 	}
 
 	/**
-	 * delay: specify how long the shuffling of random letters will last, before the first letter (of final letter) appears.
+	 * delay: specify how long the scrambling of random letters will last, before the first letter (of final letter) appears.
 	 * `delay` time adds ahead of `duration`, so that the actual effect total time is longer.
 	 */
 	if (delay){

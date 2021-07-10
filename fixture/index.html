@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<script src="../packages/scrambler/lib/index.browser.js"></script>
+	</head>
+	<body>
+		<button id="btn1">start</button>
+		<h1 id="header"></h1>
+		<script>
+
+			const header = document.getElementById('header')
+			const btn1 = document.getElementById('btn1')
+			let count = 1
+
+			const scramble = createTextScrambler.default('Yumyulack', (text) => {
+				console.log(text, performance.now(), count++)
+				header.textContent = text
+			}, { delay: 200, rate: 100})
+
+			btn1.addEventListener('click', scramble)
+
+		</script>
+	</body>
+</html>
