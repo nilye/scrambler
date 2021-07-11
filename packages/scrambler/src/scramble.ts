@@ -1,7 +1,6 @@
 import { IndividualTimeFunc, ScramblerOptions } from "./options";
 import { isFunction } from "./predicate";
 
-
 export function scrambleWithOptions(
 	finalText: string,
 	options: ScramblerOptions,

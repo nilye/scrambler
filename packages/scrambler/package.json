@@ -1,11 +1,11 @@
 {
-  "name": "@nilify/scrambler",
+  "name": "@nilify/text-scrambler",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Nil <entaroalsace@gmail.com>",
   "homepage": "https://github.com/nilye/scrambler#readme",
   "license": "ISC",
-  "main": "lib/scrambler.js",
+  "main": "lib/index.esm.js",
   "files": [
     "lib"
   ],

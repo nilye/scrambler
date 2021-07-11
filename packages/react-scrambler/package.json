@@ -1,11 +1,11 @@
 {
-  "name": "@nilify/react-scrambler",
+  "name": "@nilify/react-text-scrambler",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "Nil <entaroalsace@gmail.com>",
   "homepage": "https://github.com/nilye/scrambler#readme",
   "license": "ISC",
-  "main": "lib/react-scrambler.js",
+  "main": "lib/index.esm.js",
   "files": [
     "lib"
   ],
@@ -15,5 +15,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nilye/scrambler.git"
+  },
+  "dependencies": {
+    "@nilify/text-scrambler": "^0.0.0"
   }
 }
