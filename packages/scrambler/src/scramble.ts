@@ -1,10 +1,16 @@
-import { IndividualTimeFunc, ScramblerOptions } from "./options";
+import { ScramblerTimeFunc, ScramblerOptions } from "./options";
 import { isFunction } from "./predicate";
+
+export type ScramblerOnChangeCallback = (
+	text: string,
+	index: number | number[],
+	isFinished: boolean
+) => void
 
 export function scrambleWithOptions(
 	finalText: string,
 	options: ScramblerOptions,
-	onChange: (text: string) => void,
+	onChange: ScramblerOnChangeCallback,
 	onEnd: () => void
 ){
 
@@ -23,7 +29,7 @@ export function scrambleWithOptions(
 	 */
 	function computeRate(){
 		if (isFunction(rate)){
-			return (rate as IndividualTimeFunc)(finishedIndex, length)
+			return (rate as ScramblerTimeFunc)(finishedIndex, length)
 		}
 		return rate
 	}
@@ -35,7 +41,7 @@ export function scrambleWithOptions(
 	function scrambleImpl(){
 		const text = finalText.slice(0, finishedIndex) + genRandomChar(length - finishedIndex, characters)
 		requestAnimationFrame(() => {
-			onChange(text)
+			onChange(text, finishedIndex - 1, false)
 			_rate = computeRate()
 		})
 	}
@@ -68,7 +74,7 @@ export function scrambleWithOptions(
 				clearInterval(stepInterval)
 				clearInterval(scrambleInterval)
 				requestAnimationFrame(() => {
-					onChange(finalText)
+					onChange(finalText, finishedIndex - 1, true)
 					onEnd()
 				})
 			}

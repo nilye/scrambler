@@ -11,8 +11,8 @@
 			const btn1 = document.getElementById('btn1')
 			let count = 1
 
-			const scramble = createTextScrambler.default('Yumyulack', (text) => {
-				console.log(text, performance.now(), count++)
+			const scramble = createTextScrambler('Yumyulack', (text, index, isFinished) => {
+				console.log(text, index, isFinished, performance.now(), count++)
 				header.textContent = text
 			}, { delay: 200, rate: 100})
 

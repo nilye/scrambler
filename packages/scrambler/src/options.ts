@@ -1,12 +1,11 @@
 import { isFunction, isNumber, isString } from "./predicate";
 
-export type ScrambleFromDirection = 'left' | 'right' | 'middle' | 'random'
-export type IndividualTimeFunc = (index: number, length: number) => number
+export type ScramblerTimeFunc = (index: number, length: number) => number
 export interface ScramblerOptions {
-	from: ScrambleFromDirection,
+	from: 'left' | 'right' | 'middle' | 'random',
 	characters: string | string[]
-	rate: number | IndividualTimeFunc,
-	interval?: number | IndividualTimeFunc,
+	rate: number | ScramblerTimeFunc,
+	interval?: number | ScramblerTimeFunc,
 	duration: number,
 	delay: number
 }
